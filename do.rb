@@ -1,14 +1,15 @@
 require 'pry'
 require 'indico'
 require 'chunky_png'
+require 'RMagick'
 
 Indico.api_key =  '48dbdf05055a75d5872b71d412890394'
 
 # Variables 
 pic = ChunkyPNG::Image.from_file('./test.png')
 wanted_template = ChunkyPNG::Image.from_file('./wanted_template.png')
-maxFaceWidth     = 180 
-maxFaceHeight    = 180
+maxFaceWidth     = 200 
+maxFaceHeight    = 200
 face_crop       = nil
 
 # ===================
@@ -70,8 +71,26 @@ elsif width != maxFaceWidth
                       maxFaceWidth,          maxFaceHeight)
 end
 
+face_crop.grayscale!
+face_crop.border!(3)
 face_crop.save('face_crop.png')
 
+wanted_template.compose!(face_crop, 150, 180)
+wanted_template.save('combined_pic.png')
+
+canvas = Magick::Image.new(301, 200){self.background_color = 'Transparent'}
+gc = Magick::Draw.new
+rand_num = rand(1000..10000000).round(-4)
+fmt = "%05.2f" % rand_num 
+dollar = "$" + fmt
+gc.pointsize(40)
+gc.text(30,70, dollar.center(14))
+gc.draw(canvas)
+canvas.write('text.png')
+
+text_pic = ChunkyPNG::Image.from_file('./text.png')
+wanted_template.compose!(text_pic, 90, 380)
+wanted_template.save('combined_pic.png')
 # pic.rect(top_left_corner[0] - 20,
 #          top_left_corner[1] - 20,
 #          bottom_right_corner[0] + 20,
