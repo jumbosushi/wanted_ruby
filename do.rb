@@ -5,40 +5,44 @@ require 'RMagick'
 
 Indico.api_key =  '48dbdf05055a75d5872b71d412890394'
 
-# Variables 
+module SavePhoto
+  def init
+
+
+# Variables
 pic = ChunkyPNG::Image.from_file('./test.png')
 wanted_template = ChunkyPNG::Image.from_file('./wanted_template.png')
-maxFaceWidth     = 200 
+maxFaceWidth     = 200
 maxFaceHeight    = 200
 face_crop       = nil
 
 # ===================
-# Helper functions 
+# Helper functions
 
 # crop needs (x, y, crop_width, crop_height)
-def getHeight(top_left, bottom_right) 
-  (top_left[1] - bottom_right[1]).abs 
+def getHeight(top_left, bottom_right)
+  (top_left[1] - bottom_right[1]).abs
 end
 
-def getWidth(top_left, bottom_right) 
+def getWidth(top_left, bottom_right)
   (bottom_right[0] - top_left[0]).abs
 end
 
-def isOversize(points, maxFaceWidth) 
+def isOversize(points, maxFaceWidth)
   points[0]["bottom_right_corner"][0] - points[0]["top_left_corner"][0] > maxFaceWidth
 end
 
 def get_padded_points(top_left, bottom_right, maxFaceWidth)
-  width = getWidth(top_left, bottom_right) 
-  pad = (maxFaceWidth - width) 
+  width = getWidth(top_left, bottom_right)
+  pad = (maxFaceWidth - width)
   [ (top_left[0] - pad),
     (top_left[1] - pad).abs,
      (top_left[0] + pad),
      (top_left[1] + pad).abs ]
 end
 
-def apply_rect() 
-  
+def apply_rect()
+
 end
 
 # ==================
@@ -63,10 +67,10 @@ puts  "==== Original face_crop"
 
 if isOversize(face_points, maxFaceWidth)
   face_crop  = face_crop.resample_bilinear(maxFaceWidth, maxFaceHeight)
-elsif width != maxFaceWidth 
+elsif width != maxFaceWidth
   padded_points =  get_padded_points(top_left_corner,
                                      bottom_right_corner,
-                                     maxFaceWidth) 
+                                     maxFaceWidth)
   face_crop = pic.crop(padded_points[0], padded_points[1],
                       maxFaceWidth,          maxFaceHeight)
 end
@@ -80,21 +84,18 @@ wanted_template.save('combined_pic.png')
 
 canvas = Magick::Image.new(301, 200){self.background_color = 'Transparent'}
 gc = Magick::Draw.new
-rand_num = rand(1000..10000000).round(-4)
-fmt = "%05.2f" % rand_num 
-dollar = "$" + fmt
+rand_num = rand(1000..10000000).round(-4).to_s.reverse.gsub(/(\d{3})(?=\d)/, '\\1,').reverse
+dollar = "$" + rand_num
+gc.pointsize(30)
+gc.text(15,70, "PREFERABLY ALIVE".center(14))
 gc.pointsize(40)
-gc.text(30,70, dollar.center(14))
+gc.text(40,120, dollar.center(14))
 gc.draw(canvas)
 canvas.write('text.png')
 
 text_pic = ChunkyPNG::Image.from_file('./text.png')
 wanted_template.compose!(text_pic, 90, 380)
 wanted_template.save('combined_pic.png')
-# pic.rect(top_left_corner[0] - 20,
-#          top_left_corner[1] - 20,
-#          bottom_right_corner[0] + 20,
-#          bottom_right_corner[1] + 20,
-#          :red )
-# pic.save('big_square.png')
 
+  end
+end

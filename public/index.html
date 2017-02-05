@@ -1,0 +1,66 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="main.css" type="text/css" media="all">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+  	<script src="capture.js"></script>
+  	<title>Wanted</title>
+    <style>
+      html{
+          width:100%;
+          height:100%;
+      }
+      body{
+          width:100%;
+          height:100%;
+      }
+    </style>
+  </head>
+  <body>
+    <h1 class="top_header">ARE YOU WANTED?</h1>
+    <div class="camera">
+     <video id="video">Video stream not available.</video>
+     <button id="startbutton">Take photo</button>
+   </div>
+   <canvas id="canvas">
+   </canvas>
+   <div class="output">
+     <img id="photo" alt="The screen capture will appear in this box.">
+   </div>
+
+    <!-- <video autoplay></video>
+    <img src="">
+    <canvas style="display:none;"></canvas>
+
+    <script>
+      var video = document.querySelector('video');
+      var canvas = document.querySelector('canvas');
+      var ctx = canvas.getContext('2d');
+      var localMediaStream = null;
+
+      var errorCallback = function(e) {
+        console.log('Reeeejected!', e);
+      };
+
+
+      function snapshot() {
+        if (localMediaStream) {
+          ctx.drawImage(video, 0, 0);
+          // "image/webp" works in Chrome.
+          // Other browsers will fall back to image/png.
+          document.querySelector('img').src = canvas.toDataURL('image/webp');
+        }
+      }
+
+      video.addEventListener('click', snapshot, false);
+
+      // Not showing vendor prefixes or code that works cross-browser.
+      navigator.getUserMedia({video: true}, function(stream) {
+        video.src = window.URL.createObjectURL(stream);
+        localMediaStream = stream;
+      }, errorCallback);
+    </script> -->
+  </body>
+</html>
